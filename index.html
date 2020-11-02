@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <title>💭Dynamic Weather App 🔅</title>
+    
+    <!-- <link rel="stylesheet" href="styles.css"> -->]
+    <style>
+        *{
+            padding:0;
+            margin:0;
+            box-sizing: border-box;
+            font-family: "Quicksand", sans-serif;
+        }
+
+        #FullArea{
+            margin-top: -80px;
+            width:100vw;
+            height:100vh;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            flex-wrap: wrap;
+            background-color:white;
+            
+        }
+
+        #card{
+            margin-top: 80px;
+            height:400px;
+            width: 300px;
+            border-radius: 20px;
+            background-color: #5499C7;
+            position:relative;
+            box-shadow: 0 0.2rem 3rem rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            animation:cardAnimate 3s linear infinite alternate;
+        }
+
+        @keyframes cardAnimate{
+            0%{border-radius: 20px;}
+            50%{border-radius: 50px;}
+            100%{border-radius: 60px;}
+        }
+
+
+        #weatherIcon{
+            height:50%;
+            width:100%;
+            margin-top: 20px;
+            font-size: 90px;
+            display:grid;
+            place-items: center;
+            animation: weathericonAnimate 3s linear infinite alternate ;
+        }
+
+
+        @keyframes weathericonAnimate{
+            0%{font-size: 90px;}
+            50%{font-size: 80px;}
+            100%{font-size: 70px;}
+        }
+
+
+        .wave{
+            width:500px;
+            height:500px;
+            border-radius: 42%;
+            opacity:0.3;
+            background: white;
+            position: absolute;
+            top:50%;
+            left:20%;
+            animation:moveWaves 5000ms linear infinite alternate;
+            z-index:1;
+            transform-origin: 50% 48%;
+            margin-left: -50%;
+            box-shadow:0 0.1rem 3rem rgba(0, 0, 0, 0.5) ;
+        }
+
+        .wave.two{
+            animation:moveWaves 7000ms linear infinite alternate;
+            opacity: 0.2;
+            
+        }
+
+        .wave.three{
+            animation:moveWaves 9000ms linear infinite alternate;
+            opacity: 0.1;
+        }
+
+
+        .card:after {
+            content: "";
+            display: block;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 11;
+        }
+
+        @keyframes moveWaves{
+            0%{transform:rotate(0deg);}
+            100%{transform:rotate(360deg);}
+        }
+
+        #info{
+            position: absolute;
+            bottom:0;
+            width:100%;
+            height:45%;
+            z-index: 4;
+        }
+
+        .location{
+            margin-top: 0px;
+            text-align: center;
+            font-weight:800;
+            font-size: 30px;
+        }
+
+        .fa-street-view {
+            animation: rotates 3s linear infinite alternate;
+        }
+
+        @keyframes rotates {
+            0%{transform: translateX(-0.5rem);}
+            100%{transform: translateX(0.5rem);}
+        }
+
+        #date{
+            text-align: center;
+            margin-top: 0.5rem;
+            color:#2f4770;
+            font-size: 1rem;
+            font-weight:300;
+            text-transform: uppercase;
+            animation:tempAnimate 3s linear infinite alternate;
+        }
+
+        #temparature{
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size:30px ;
+            animation:tempAnimate 3s linear infinite alternate;
+        }
+
+
+        #min-max-temp{
+            text-align: center;
+            margin-top: 0.5rem;
+            color:#57606f;
+            font-size: 1rem;
+            font-weight:300;
+            text-transform: uppercase;
+            animation:tempAnimate 3s linear infinite alternate;
+        }
+
+        @keyframes tempAnimate{
+            0%{letter-spacing: normal;}
+            100%{letter-spacing: 1.5px;}
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="FullArea">
+        <h2>Weather Report Of Your Current Location</h2>
+        <div id="card">
+
+            <div class="wave one"></div>
+            <div class="wave two"></div>
+            <div class="wave three"></div>
+
+            <div id="weatherIcon" "><i class="fas fa-sun" style="color:rgb(230, 197, 13)"></i></div>
+            <div id="info">
+                <h1 class="location"><i class="fas fa-street-view"></i>{% cityname %} , {% country %}</h1>
+                <p id="date">Day | Date | time </p>
+                <h1 id="temparature">{% tempval %}° C</h1>
+                <p id="min-max-temp">MIN {% mintemp %}° C | MAX {% maxtemp %}° C</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- <script src="action.js"></script> -->
+    <script>
+        const curDate = document.getElementById("date");
+        let weatherIcon = document.getElementById('weatherIcon');
+
+        let weatherStatus = '{%weatherstatus%}';
+
+        if(weatherStatus == "Sunny"){
+            weatherIcon.innerHTML = "<i class='fas fa-sun' style='color:rgb(230, 197, 13)'></i>"
+        }
+        else if(weatherStatus == "Clouds"){
+            weatherIcon.innerHTML = "<i class='fas fa-cloud' style='color:#f1f2f6'></i>"
+        }
+        if(weatherStatus == "Rainy"){
+            weatherIcon.innerHTML = "<i class='fas fa-rain' style='color:#a4b0be'></i>"
+        }
+        else{
+            weatherIcon.innerHTML = "<i class='fas fa-smog' style='color:rgb(230, 197, 40)'></i>"
+        }
+
+        const currDate = () =>{
+            const d = new Date();
+            
+            var weekday=["sun","Mon","tue","wed","thu","fri","sat"];
+            var day= weekday[d.getDay()];
+
+            var months = ["Jan","feb","Mar","Apr","May","jun","jul","Aug","sep","oct","nov","dec"];
+            var month = months[d.getMonth()];
+
+            var todaydate = d.getDate();
+
+            let hours = d.getHours();
+            let minutes = d.getMinutes();
+            // let seconds = d.getSeconds();
+            let period  = "AM";
+            if(hours > 11 ){
+                period = "PM";
+                if(hours> 12 )hours-=12;
+            }
+            if(hours === 0 ){
+                hours=12;
+            }
+            if(minutes < 10){
+                minutes = "0"+minutes;
+            }
+
+            return `${day} | ${month} ${todaydate} | ${hours}:${minutes} ${period}`;
+        }
+
+        curDate.innerHTML = currDate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "dynamicweatherapp",
+  "version": "1.0.0",
+  "description": "\"This is a simple but dynamic weather app working by api\"",
+  "main": "action.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "\"Ratul Maity\"",
+  "license": "ISC",
+  "dependencies": {
+    "requests": "^0.3.0"
+  }
+}
